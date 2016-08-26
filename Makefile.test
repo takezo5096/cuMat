@@ -1,0 +1,16 @@
+CC=g++
+NVCC=nvcc
+CUDA_TOP=/usr/local/cuda
+INC=-I$(CUDA_TOP)/include -I./
+LIB=-L$(CUDA_TOP)/lib64 -L./ -lcublas -lcudart -lm -lcumat
+#OTHER_OPTS=-std=c++11 -O2 -D_FORCE_INLINES
+OTHER_OPTS=-std=c++11 -O2
+
+
+test: test.cpp
+		$(CC) -o test test.cpp $(INC) $(LIB) $(OTHER_OPTS)
+
+
+clean:
+	         rm -f test
+			 rm -f test.o
