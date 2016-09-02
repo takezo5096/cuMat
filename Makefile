@@ -5,6 +5,7 @@ INC=-I$(CUDA_TOP)/include
 #LIB=-L$(CUDA_TOP)/lib64 -L./ -lcublas -lcudart -lm
 
 
+
 #OBJ= adam2_kernel.o adam_kernel.o dropout_kernel.o matcos_kernel.o matdiv_kernel.o matl2_kernel.o matlog_kernel.o matmod_kernel.o matmul2_kernel.o matmul2_plus_kernel.o matones_kernel.o matsin_kernel.o matsqrt_kernel.o matsum_kernel.o relu_d_kernel.o relu_kernel.o sigmoid_d_kernel.o sigmoid_kernel.o softmax_cross_entropy_kernel.o softmax_kernel.o tanh_d_kernel.o tanh_kernel.o
 OBJ=softmax_kernel.o mat_log_kernel.o mat_sin_kernel.o mat_cos_kernel.o adam2_kernel.o dropout_kernel.o mat_mul_elementwise_plus_kernel.o mat_sqrt_kernel.o relu_d_kernel.o relu_kernel.o sigmoid_d_kernel.o sigmoid_kernel.o tanh_d_kernel.o tanh_kernel.o softmax_cross_entropy_kernel.o mat_sum_kernel.o mat_l2_kernel.o mat_div_kernel.o mat_ones_kernel.o mat_mul_elementwise_kernel.o
 
