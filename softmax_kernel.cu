@@ -1,6 +1,6 @@
 #include "softmax_kernel.h"
 
-#define BLOCK_SIZE 16
+#define BLOCK_SIZE 32
 
 __device__ void AtomicMax(float * const address, const float value)
 {
