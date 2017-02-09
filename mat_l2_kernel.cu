@@ -1,6 +1,6 @@
 #include "mat_l2_kernel.h"
 
-#define BLOCK_SIZE 16
+#define BLOCK_SIZE 32
 
 #include <stdio.h>
 
