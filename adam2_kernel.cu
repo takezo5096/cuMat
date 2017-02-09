@@ -1,7 +1,7 @@
 #include "adam2_kernel.h"
 #include <curand_kernel.h>
 
-#define BLOCK_SIZE 16
+#define BLOCK_SIZE 32
 
 //mm += (1.0 - beta1) * (mg - mm);
 //mv += (1.0 - beta2) * (mg*mg - mv);
