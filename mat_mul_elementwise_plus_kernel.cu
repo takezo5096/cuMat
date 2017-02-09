@@ -1,6 +1,6 @@
 #include "mat_mul_elementwise_plus_kernel.h"
 
-#define BLOCK_SIZE 16
+#define BLOCK_SIZE 32
 
 __global__ void mat_mul_elementwise_plus_kernel (
         const float * __restrict__ src1,
