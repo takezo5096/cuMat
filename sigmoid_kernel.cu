@@ -1,6 +1,6 @@
 #include "sigmoid_kernel.h"
 
-#define BLOCK_SIZE 16
+#define BLOCK_SIZE 32
 
 __device__ __forceinline__ float sigmoid (float a){
     return 1.0f/(1.0f + std::exp(-a));
