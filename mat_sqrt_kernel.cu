@@ -1,6 +1,6 @@
 #include "mat_sqrt_kernel.h"
 
-#define BLOCK_SIZE 16
+#define BLOCK_SIZE 32
 
 __device__ __forceinline__ float mat_sqrt (float a, float alpha){
     return std::sqrt(a+alpha);
