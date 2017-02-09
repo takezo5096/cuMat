@@ -1,6 +1,6 @@
 #include "sigmoid_d_kernel.h"
 
-#define BLOCK_SIZE 16
+#define BLOCK_SIZE 32
 
 __device__ __forceinline__ float sigmoid_d (float a){
     float b;
