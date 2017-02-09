@@ -1,6 +1,6 @@
 #include "tanh_kernel.h"
 
-#define BLOCK_SIZE 16
+#define BLOCK_SIZE 32
 
 __device__ __forceinline__ float tanh_f(float a){
     return std::tanh(a);
