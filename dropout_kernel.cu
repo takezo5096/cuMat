@@ -1,7 +1,7 @@
 #include "dropout_kernel.h"
 #include <curand_kernel.h>
 
-#define BLOCK_SIZE 16
+#define BLOCK_SIZE 32
 
 __device__ int WangHash(int a) {
     a = (a ^ 61) ^ (a >> 16);
@@ -32,8 +32,8 @@ __global__ void dropout_kernel (const float * __restrict__ src,
         float randNum = curand_uniform(&state);
 
 
-        if (randNum > p){
-            dst[row * n + col] = src[row * n + col];
+        if (randNum < p){
+            dst[row * n + col] = src[row * n + col] / (1.0-p);
             dst_idx[row * n + col] = 1.0f;
         }
         else{
