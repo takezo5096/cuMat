@@ -1,6 +1,6 @@
 #include "softmax_cross_entropy_kernel.h"
 
-#define BLOCK_SIZE 16
+#define BLOCK_SIZE 32
 
 /*
  * softmax cross entropy kernel
@@ -14,6 +14,10 @@ __global__ void softmax_cross_entropy_kernel (
     int col = blockIdx.x*blockDim.x+threadIdx.x;
 
     if (row < m && col < n){
+
+        //if (src2[row*n+3] == 1) dst[row * n + col] = 0;
+        //else dst[row * n + col] = -1.0f * std::log(src1[row * n + col] + 1e-8) * src2[row * n + col];
+
         dst[row * n + col] = -1.0f * std::log(src1[row * n + col] + 1e-8) * src2[row * n + col];
     }
 }
