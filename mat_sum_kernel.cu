@@ -1,7 +1,7 @@
 
 #include "mat_sum_kernel.h"
 
-#define BLOCK_SIZE 16
+#define BLOCK_SIZE 32
 
 __global__ void mat_sum_kernel (const float * __restrict__ src,
                                 float * __restrict__ dst, int m, int n){
