@@ -1,6 +1,6 @@
 #include "mat_sin_kernel.h"
 
-#define BLOCK_SIZE 16
+#define BLOCK_SIZE 32
 
 __device__ __forceinline__ float mat_sin(float a, float alpha){
     return std::sin(a + alpha);
