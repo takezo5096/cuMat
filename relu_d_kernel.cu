@@ -1,6 +1,6 @@
 #include "relu_d_kernel.h"
 
-#define BLOCK_SIZE 16
+#define BLOCK_SIZE 32
 
 __device__ __forceinline__ float relu_d(float a){
     return a > 0.0f ? 1.0f:0.0f;
