@@ -1117,7 +1117,6 @@ public:
 
         pooling_gpu(pooled.mDevice,
                          mDevice,
-                    NN_POOL_MAX,
                     width,
                     height,
                     depth * batch_size,
@@ -1141,7 +1140,6 @@ public:
         poolingBackward_gpu(dzdx.mDevice,
                             mDevice,
                 dzdy,
-                            NN_POOL_MAX,
                 width,
                 height,
                 depth * batch_size,
