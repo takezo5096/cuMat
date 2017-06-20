@@ -1,8 +1,5 @@
 /*
  * cuMat.h
- *
- *  Created on: 2016/01/12
- *      Author: takeshi.fujita
  */
 
 #ifndef CUMAT_H_
@@ -12,7 +9,6 @@
 #include <cuda_runtime.h>
 #include <cmath>
 #include <random>
-//#include <chrono>
 #include <sstream>
 #include <map>
 
@@ -154,7 +150,6 @@ public:
         cublasCreate(&cudaHandle);
         cudaThreadSynchronize();
 
-        //cout << "cuMat constractor rows cols" << endl;
         new_matrix(rows, cols);
 
     }
@@ -162,7 +157,7 @@ public:
     cuMat(const cuMat &a) {
         cublasCreate(&cudaHandle);
         cudaThreadSynchronize();
-        //cout << "cuMat copy constractor" << endl;
+
         new_matrix(a.rows, a.cols);
 
         cudaError_t error = cudaMemcpy(mDevice, a.mDevice,
@@ -173,7 +168,6 @@ public:
     }
 
     ~cuMat() {
-        //cout << "cuMat ~cuMat" << endl;
         del_matrix();
         cublasDestroy(cudaHandle);
     }
@@ -302,7 +296,6 @@ public:
         }
     }
     void fromHostArray(){
-        //cout << "fromHostArray" << endl;
         if (mDevice == NULL) this->memMallocDevice();
         if (mHost == NULL) this->memMallocHost();
         for (int i = 0; i < rows; i++) {
@@ -312,7 +305,6 @@ public:
         }
 
         memHostToDevice();
-        //cout << *this;
     }
 
 
@@ -327,39 +319,8 @@ public:
     void joinRows(cuMat &a, int offset, int len){
         join_rows_kernel_exec(a.mDevice, mDevice, cols, rows, offset, len);
     }
-    /*
-    cuMat sliceRows(int offset, int len){
-        this->memDeviceToHost();
-
-        cuMat r(len, this->cols);
-        r.memDeviceToHost();
-        int n_i = 0;
-        for (int i = offset; i < offset+len; i++) {
-            for (int j = 0; j < cols; j++){
-                r.mHost[IDX2F(n_i, j, len)] = mHost[IDX2F(i, j, rows)];
-            }
-            n_i++;
-        }
-        r.memHostToDevice();
-        return r;
-    }
-
-    void joinRows(cuMat &a, int offset, int len){
-        this->memDeviceToHost();
-        a.memDeviceToHost();
-        int n_i = 0;
-        for (int i = offset; i < offset+len; i++) {
-            for (int j = 0; j < cols; j++){
-                mHost[IDX2F(i, j, rows)] = a.mHost[IDX2F(n_i, j, len)];
-            }
-            n_i++;
-        }
-        memHostToDevice();
-    }
-    */
 
     cuMat &operator=(const cuMat &a) {
-        //cout << "cuMat operator=" << endl;
         new_matrix(a.rows, a.cols);
 
         cudaError_t error = cudaMemcpy(mDevice, a.mDevice,
@@ -588,7 +549,6 @@ public:
 
         cuMat i(rows, cols);
         i.ones();
-        //r.ones();
 
         float alpha = 1;
         cublasStatus_t stat = cublasSgeam(r.cudaHandle, CUBLAS_OP_N,
@@ -599,9 +559,6 @@ public:
         cudaThreadSynchronize();
     }
     void plus(const float beta, cuMat &i, cuMat &r) {
-
-        //i.ones();
-        //r.ones();
 
         float alpha = 1;
         cublasStatus_t stat = cublasSgeam(r.cudaHandle, CUBLAS_OP_N,
@@ -724,7 +681,6 @@ public:
 
     void mul(const cuMat &m, cuMat &r) {
 
-        //matmul2_kernel_exec(mDevice, m.mDevice, r.mDevice, cols, rows);
         mat_mul_elementwise_kernel_exec(mDevice, m.mDevice, r.mDevice, cols, rows);
     }
     void mul_plus(const cuMat &m, cuMat &r, float alpha, float beta) {
@@ -800,7 +756,6 @@ public:
         relu_d_kernel_exec(mDevice, r.mDevice, cols, rows);
     }
 
-    //
     cuMat prelu(cuMat &a) {
         cuMat r(rows, cols);
         prelu(a, r);
@@ -820,9 +775,6 @@ public:
 
         prelu_d_kernel_exec(mDevice, a.mDevice, r.mDevice, da.mDevice, cols, rows);
     }
-
-    //
-
 
 
     cuMat sigmoid() {
@@ -913,8 +865,6 @@ public:
         }
 
     void maxRowIndex(int *idx) {
-        //std::chrono::system_clock::time_point  start, end;
-        //start = std::chrono::system_clock::now();
 
         if (mHost == NULL)
             this->memMallocHost();
@@ -932,9 +882,6 @@ public:
                 }
             }
         }
-        //end = std::chrono::system_clock::now();
-        //int elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end-start).count();
-        //cout << elapsed << endl;
     }
 
     void dropout(cuMat &r, cuMat &idx, float p) {
@@ -1043,25 +990,6 @@ public:
         outputDimH = 1 + (h_size + (pad_top+pad_bottom) - filter_size_h)/stride_y;
 
         cuMat stacked(outputDimW * outputDimH, filter_size_w*filter_size_h * channel_num);
-        //cuMat stacked(filter_size_w*filter_size_h * channel_num, outputDimW * outputDimH);
-
-        /*
-        im2col_gpu(
-                stacked.mDevice,
-                mDevice,
-                w_size, //size_t width,
-                h_size, //size_t height,
-                channel_num, //size_t depth,
-                filter_size_w, //size_t windowWidth,
-                filter_size_h, //size_t windowHeight,
-                stride_x, //strideX,
-                stride_y, //size_t strideY,
-                pad_left, //size_t padLeft,
-                pad_right, //size_t padRight,
-                pad_top, //size_t padTop,
-                pad_bottom //size_t padBottom
-        );
-        */
 
         im2col_ongpu(mDevice,
                      channel_num, w_size, w_size,
@@ -1073,26 +1001,7 @@ public:
     cuMat col2im(int w_size, int h_size, int channel_num, int filter_size_w, int filter_size_h,
                  int stride_x, int stride_y, int pad_left, int pad_right, int pad_top, int pad_bottom){
 
-        //cuMat dest(channel_num, w_size * h_size);
         cuMat dest(w_size * h_size, channel_num);
-
-        /*
-        col2im_gpu(dest.mDevice,
-                   mDevice,
-                   w_size,
-                   h_size,
-                   channel_num,
-                   filter_size_w,
-                   filter_size_h,
-                   stride_x,
-                   stride_y,
-                   pad_left, //size_t padLeft,
-                   pad_right, //size_t padRight,
-                   pad_top, //size_t padTop,
-                   pad_bottom //size_t padBottom
-        );
-        */
-
 
         col2im_ongpu(mDevice,
                      channel_num, w_size, w_size,
@@ -1106,14 +1015,13 @@ public:
                   int strideX, int strideY, int padLeft, int padRight, int padTop, int padBottom){
 
         /*
-         * according to the cuDNN Library reference, get pooling size as followed:
+         * Ppooling size as followed:
          * outputDim = 1 + (inputDim + 2*padding - windowDim)/poolingStride;
          */
         int pooled_w = 1 + (width + (padLeft+padRight) - windowWidth)/strideX;
         int pooled_h = 1 + (height + (padTop+padBottom) - windowHeight)/strideY;
 
         cuMat pooled(pooled_w * pooled_h * depth, batch_size);
-        //cuMat pooled(batch_size, pooled_w * pooled_h * depth);
 
         pooling_gpu(pooled.mDevice,
                          mDevice,
@@ -1135,7 +1043,6 @@ public:
                            int strideX, int strideY, int padLeft, int padRight, int padTop, int padBottom){
 
         cuMat dzdx(width * height * depth, batch_size);
-        //cuMat dzdx(batch_size, width * height * depth);
 
         poolingBackward_gpu(dzdx.mDevice,
                             mDevice,
