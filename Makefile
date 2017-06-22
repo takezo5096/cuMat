@@ -1,7 +1,7 @@
 CC=g++
 NVCC=nvcc
 CUDA_TOP=/usr/local/cuda
-INC=-I$(CUDA_TOP)/include
+INC=-I$(CUDA_TOP)/include -gencode=arch=compute_50,code=\"sm_50,compute_50\"
 #LIB=-L$(CUDA_TOP)/lib64 -L./ -lcublas -lcudart -lm
 
 
